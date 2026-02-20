@@ -1,7 +1,7 @@
 /-!
   # Safe Byte Access
   Provides bounds-checked byte array access for network protocol parsing.
-  Prevents panic!/crash from out-of-bounds `get!` when processing untrusted network data.
+  Prevents crashes from out-of-bounds `get!` when processing untrusted network data.
 
   ## Usage
   ```lean
