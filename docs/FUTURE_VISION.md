@@ -65,7 +65,20 @@ structure IoUringResult where
 
 ---
 
-## F8.3 — WebAssembly Target
+## F8.3 — WebAssembly Target ✅
+
+### Status: Implemented
+The WASM project is available at:
+https://github.com/AfonsoBitoque/LeanServerWASM
+
+### What was built
+- **WasmAPI.lean** — `@[export]` wrappers for 18 pure functions (SHA-256,
+  HMAC, HKDF, AES-128-GCM, X25519, HPACK, HTTP/2, TLS 1.3 key derivation)
+- **wasm_glue.c** — C bridge between Emscripten and Lean 4 runtime
+- **lean_server_wasm.js** — High-level JavaScript API with typed methods
+- **build_wasm.sh** — Automated Lean → C → WASM pipeline
+- **dist/index.html** — Interactive demo page (SHA-256, AES-GCM, X25519 DH,
+  TLS 1.3 key derivation, Huffman codec)
 
 ### Prerequisite: Pure Library ✅
 The `LeanServerPure` library (43 modules, zero C dependencies) is now available.
