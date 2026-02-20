@@ -1,0 +1,128 @@
+name: Fuzz Testing
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Run fuzz tests daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Number of fuzz iterations per harness'
+        required: false
+        default: '1000'
+
+env:
+  FUZZ_ITERATIONS: ${{ github.event.inputs.iterations || '1000' }}
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        harness:
+          - FuzzTLS
+          - FuzzHTTP2
+          - FuzzQUIC
+          - FuzzWebSocket
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgmp-dev libssl-dev
+
+      - name: Install Lean (elan)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            ~/.elan/toolchains
+          key: lake-fuzz-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-fuzz-${{ runner.os }}-
+            lake-${{ runner.os }}-
+
+      - name: Build library
+        run: lake build LeanServer
+
+      - name: Run ${{ matrix.harness }}
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "▶ Running ${{ matrix.harness }} (iterations: $FUZZ_ITERATIONS)"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          timeout 1800 lake env lean fuzz/${{ matrix.harness }}.lean
+
+      - name: Upload crash artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-crash-${{ matrix.harness }}
+          path: |
+            fuzz/crash-*
+            fuzz/*.log
+          retention-days: 30
+
+  fuzz-all:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: fuzz
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgmp-dev libssl-dev
+
+      - name: Install Lean (elan)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            ~/.elan/toolchains
+          key: lake-fuzz-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-fuzz-${{ runner.os }}-
+            lake-${{ runner.os }}-
+
+      - name: Build library
+        run: lake build LeanServer
+
+      - name: Run full fuzz suite
+        run: bash fuzz/run_all.sh
+
+      - name: Fuzz summary
+        if: always()
+        run: |
+          echo "## Fuzz Testing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Harness | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          for harness in fuzz/Fuzz*.lean; do
+            name=$(basename "$harness" .lean)
+            if lake env lean "$harness" > /dev/null 2>&1; then
+              echo "| $name | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| $name | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

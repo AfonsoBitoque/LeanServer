@@ -1,0 +1,14 @@
+name = "basic-server"
+version = "0.1.0"
+description = "Exemplo básico de servidor HTTPS com LeanServer"
+
+[[require]]
+name = "leanserver"
+path = "../.."
+
+[[lean_lib]]
+name = "BasicServer"
+
+[[lean_exe]]
+name = "basic-server"
+root = "Main"

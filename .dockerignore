@@ -1,0 +1,7 @@
+.lake/
+.git/
+build/
+*.o
+*.olean
+trace.txt
+temp.txt

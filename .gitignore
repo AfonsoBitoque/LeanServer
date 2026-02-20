@@ -1,0 +1,37 @@
+/.lake
+/.lakeAntigo
+
+# Build artifacts
+*.o
+*.a
+*.exe
+*.so
+*.dylib
+
+# Logs
+*.log
+
+# Generated certs and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Backup files
+*.backup*
+*.bak
+*.orig
+*~
+
+# Internal analysis (not for public release)
+analise*.md
+analiseestrategica*.md
+MISSING_PROOFS_ANALYSIS.md
+ROADMAP_FINAL.md
+ROADMAP_V2.md
+
+# Temp files
+temp.txt
+trace.txt
+/tmp/

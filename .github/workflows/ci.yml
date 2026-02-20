@@ -1,0 +1,160 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  ELAN_VERSION: 'v4.27.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgmp-dev libssl-dev
+
+      - name: Install Lean (elan)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            ~/.elan/toolchains
+          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-${{ runner.os }}-
+
+      - name: Build library
+        run: lake build LeanServer
+
+      - name: Build main server
+        run: lake build leanserver
+
+  test-pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgmp-dev libssl-dev
+
+      - name: Install Lean (elan)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+            ~/.elan/toolchains
+          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-${{ runner.os }}-
+
+      - name: Build and run pure tests
+        run: |
+          lake build test && .lake/build/bin/test
+          lake build test_primitives && .lake/build/bin/test_primitives
+          lake build test_aes && .lake/build/bin/test_aes
+          lake build test_x25519 && .lake/build/bin/test_x25519
+          lake build testquic && .lake/build/bin/testquic
+          lake build testfileio && .lake/build/bin/testfileio
+
+      - name: RFC conformance test vectors
+        run: |
+          lake build test_rfc_vectors && .lake/build/bin/test_rfc_vectors
+
+      - name: Differential crypto tests (Phase 8.1)
+        run: |
+          lake build differential_crypto && .lake/build/bin/differential_crypto
+
+      - name: HTTP/2 conformance tests (Phase 8.3)
+        run: |
+          lake build http2_conformance && .lake/build/bin/http2_conformance
+
+      - name: TLS handshake e2e tests (Phase 8.2)
+        run: |
+          lake build tls_handshake_e2e && .lake/build/bin/tls_handshake_e2e
+
+      - name: Integration tests (F1.4)
+        run: |
+          lake build test_integration_real && .lake/build/bin/test_integration_real
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for sorry
+        run: |
+          echo "Checking for 'sorry' in source files..."
+          # Filter out comments (-- sorry), documentation (0 sorry), and strings
+          SORRY=$(grep -rn "\bsorry\b" --include="*.lean" LeanServer/ \
+            | grep -v "^[^:]*:[^:]*:.*--" \
+            | grep -v "0 sorry\|zero sorry\|Zero sorry\|sem sorry\|no sorry\|No sorry" \
+            | grep -v '".*sorry.*"' \
+            | grep -v "/-" || true)
+          if [ -n "$SORRY" ]; then
+            echo "$SORRY"
+            echo "::error::Found 'sorry' in source files!"
+            exit 1
+          fi
+          echo "✅ No sorry found"
+
+      - name: Check for unsafe
+        run: |
+          echo "Checking for 'unsafe' in source files..."
+          if grep -rn "^unsafe " --include="*.lean" LeanServer/; then
+            echo "::error::Found 'unsafe' in source files!"
+            exit 1
+          fi
+          echo "✅ No unsafe found"
+
+      - name: Check for panic!
+        run: |
+          echo "Checking for 'panic!' in source files..."
+          if grep -rn "panic!" --include="*.lean" LeanServer/; then
+            echo "::warning::Found 'panic!' in source files"
+          fi
+
+      - name: Count get! usage
+        run: |
+          echo "Counting 'get!' usage in source files..."
+          count=$(grep -rcn "get!" --include="*.lean" LeanServer/ | awk -F: '{s+=$2}END{print s}')
+          echo "Total get! calls: $count"
+          if [ "$count" -gt 200 ]; then
+            echo "::warning::High number of get! calls ($count). Consider using safe accessors."
+          fi
+
+      - name: LOC statistics
+        run: |
+          echo "=== Lines of Code ==="
+          find LeanServer -name "*.lean" -exec wc -l {} + | sort -n
+          echo ""
+          echo "=== Theorem count ==="
+          grep -rcn "^theorem " --include="*.lean" LeanServer/ | awk -F: '{s+=$2}END{print "Total theorems:", s}'
+          echo ""
+          echo "=== Module count ==="
+          find LeanServer -name "*.lean" | wc -l

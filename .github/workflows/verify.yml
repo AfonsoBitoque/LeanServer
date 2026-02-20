@@ -1,0 +1,98 @@
+name: Verify & Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install elan (Lean toolchain manager)
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake/packages
+            .lake/build
+          key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
+          restore-keys: |
+            lake-${{ runner.os }}-
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc libc6-dev
+
+      # ── Build ─────────────────────────────────────────────
+      - name: Build project
+        run: lake build leanserver
+
+      # ── Verification Checks ──────────────────────────────
+      - name: Check zero sorry
+        run: |
+          # Search for sorry as a tactic/term, excluding comments and doc strings
+          count=$(grep -rn "\bsorry\b" LeanServer/ --include="*.lean" | grep -v "^[^:]*:[^:]*:.*--" | grep -v "/-" | grep -v "0 sorry" | grep -v "zero sorry" | grep -v "Zero sorry" | wc -l)
+          if [ "$count" -gt 0 ]; then
+            echo "❌ Found $count sorry occurrences:"
+            grep -rn "\bsorry\b" LeanServer/ --include="*.lean" | grep -v "^[^:]*:[^:]*:.*--" | grep -v "/-" | grep -v "0 sorry"
+            exit 1
+          fi
+          echo "✅ Zero sorry found"
+
+      - name: Check partial def count (max 12)
+        run: |
+          count=$(grep -r "partial def" LeanServer/ --include="*.lean" | wc -l)
+          echo "partial def count: $count"
+          if [ "$count" -gt 12 ]; then
+            echo "❌ Too many partial defs: $count (max: 12)"
+            grep -rn "partial def" LeanServer/ --include="*.lean"
+            exit 1
+          fi
+          echo "✅ partial def count OK: $count ≤ 12"
+
+      - name: Check native_decide count (max 80)
+        run: |
+          count=$(grep -r "native_decide" LeanServer/ --include="*.lean" | wc -l)
+          echo "native_decide count: $count"
+          if [ "$count" -gt 80 ]; then
+            echo "❌ Too many native_decide: $count (max: 80)"
+            exit 1
+          fi
+          echo "✅ native_decide count OK: $count ≤ 80"
+
+      - name: Count proofs
+        run: |
+          theorems=$(grep -r "^theorem\|^  theorem\|^def.*:=.*by" LeanServer/ --include="*.lean" | grep -c "theorem" || true)
+          echo "📊 Theorem count: $theorems"
+
+      # ── Summary ──────────────────────────────────────────
+      - name: Build summary
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          lean_files=$(find LeanServer/ -name "*.lean" | wc -l)
+          lean_loc=$(find LeanServer/ -name "*.lean" -exec cat {} + | wc -l)
+          theorems=$(grep -r "^theorem\|^  theorem" LeanServer/ --include="*.lean" | grep -c "theorem" || true)
+          sorry_count=$(grep -r "sorry" LeanServer/ --include="*.lean" | grep -v "^.*:.*--.*sorry" | grep -v "/\*" | wc -l)
+          partial_count=$(grep -r "partial def" LeanServer/ --include="*.lean" | wc -l)
+          native_count=$(grep -r "native_decide" LeanServer/ --include="*.lean" | wc -l)
+          echo "| Lean files | $lean_files |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lines of Lean | $lean_loc |" >> $GITHUB_STEP_SUMMARY
+          echo "| Theorems | $theorems |" >> $GITHUB_STEP_SUMMARY
+          echo "| sorry count | $sorry_count |" >> $GITHUB_STEP_SUMMARY
+          echo "| partial def count | $partial_count |" >> $GITHUB_STEP_SUMMARY
+          echo "| native_decide count | $native_count |" >> $GITHUB_STEP_SUMMARY

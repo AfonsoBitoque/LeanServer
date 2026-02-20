@@ -1,0 +1,150 @@
+name = "LeanServer"
+version = "0.1.0"
+defaultTargets = ["LeanServer"]
+
+# ── Pure Library (zero C dependencies) ───────────────────
+# Import as `import LeanServerPure` for the full pure subset,
+# or import individual modules like `import LeanServer.Crypto.AES`.
+# Suitable for: Lake dependencies, WASM compilation, pure verification.
+
+[[lean_lib]]
+name = "LeanServerPure"
+precompileModules = true
+
+# ── Full Library (includes C FFI for networking, DB, OpenSSL) ─
+
+[[lean_lib]]
+name = "LeanServer"
+cIncludeDirs = ["src"]
+cSources = ["src/Network.c"]
+moreLinkArgs = ["-lgmp"]
+precompileModules = true
+
+# ── Main Server ──────────────────────────────────────────
+
+[[lean_exe]]
+name = "leanserver"
+root = "Main"
+moreLinkArgs = ["-lgmp", "Network.o", "db_stubs.o", "crypto_ffi.o", "sqlite_ffi.o"]
+supportInterpreter = true
+
+# ── Application Entry Points ────────────────────────────
+
+[[lean_exe]]
+name = "webserver"
+root = "app.WebServerMainSimple"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+[[lean_exe]]
+name = "realhttps"
+root = "app.RealHTTPServer"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+# ── Tests ────────────────────────────────────────────────
+
+[[lean_exe]]
+name = "test"
+root = "tests.Test"
+
+[[lean_exe]]
+name = "testfileio"
+root = "tests.TestFileIO"
+
+[[lean_exe]]
+name = "testquic"
+root = "tests.TestQUIC"
+
+[[lean_exe]]
+name = "testdatabase"
+root = "tests.TestDatabase"
+
+[[lean_exe]]
+name = "databaseexamples"
+root = "tests.DatabaseExamples"
+
+[[lean_exe]]
+name = "testtcp"
+root = "tests.TestTCP"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+[[lean_exe]]
+name = "test_primitives"
+root = "tests.TestCryptoPrimitives"
+
+[[lean_exe]]
+name = "test_aes"
+root = "tests.TestAES"
+
+[[lean_exe]]
+name = "test_x25519"
+root = "tests.TestX25519"
+
+[[lean_exe]]
+name = "webapptests"
+root = "LeanServer.Web.WebAppTests"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+[[lean_exe]]
+name = "test_rfc_vectors"
+root = "tests.TestRFCVectors"
+
+[[lean_exe]]
+name = "differential_crypto"
+root = "tests.DifferentialCrypto"
+
+[[lean_exe]]
+name = "http2_conformance"
+root = "tests.HTTP2Conformance"
+
+[[lean_exe]]
+name = "tls_handshake_e2e"
+root = "tests.TLSHandshakeE2E"
+
+[[lean_exe]]
+name = "test_integration"
+root = "tests.TestIntegration"
+moreLinkArgs = ["-lgmp", "Network.o", "db_stubs.o", "crypto_ffi.o", "sqlite_ffi.o"]
+
+# ── Fuzz Harnesses ───────────────────────────────────────
+
+[[lean_exe]]
+name = "fuzz_tls"
+root = "fuzz.FuzzTLS"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+[[lean_exe]]
+name = "fuzz_http2"
+root = "fuzz.FuzzHTTP2"
+
+[[lean_exe]]
+name = "fuzz_quic"
+root = "fuzz.FuzzQUIC"
+
+[[lean_exe]]
+name = "fuzz_websocket"
+root = "fuzz.FuzzWebSocket"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+# ── Property-Based Tests ─────────────────────────────────
+
+[[lean_exe]]
+name = "prop_tests"
+root = "tests.PropertyTests"
+moreLinkArgs = ["-lgmp", "Network.o"]
+
+# ── Real Integration Tests (F1.4) ────────────────────────
+
+[[lean_exe]]
+name = "test_integration_real"
+root = "tests.TestIntegrationReal"
+moreLinkArgs = ["-lgmp", "Network.o", "db_stubs.o", "crypto_ffi.o", "sqlite_ffi.o"]
+
+[[lean_exe]]
+name = "fuzz_extended"
+root = "tests.FuzzExtended"
+moreLinkArgs = ["-lgmp", "Network.o", "db_stubs.o", "crypto_ffi.o", "sqlite_ffi.o"]
+
+# ── Benchmarks ───────────────────────────────────────────
+
+# Note: Benchmark module is LeanServer.Server.Benchmark (library, not exe)
+# To run benchmarks, build a small main that calls runAllBenchmarks
