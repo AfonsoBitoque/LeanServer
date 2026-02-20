@@ -37,6 +37,9 @@ jobs:
           restore-keys: |
             lake-${{ runner.os }}-
 
+      - name: Compile C FFI objects
+        run: make
+
       - name: Build library
         run: lake build LeanServer
 
@@ -70,6 +73,9 @@ jobs:
           key: lake-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lakefile.toml', 'lake-manifest.json') }}
           restore-keys: |
             lake-${{ runner.os }}-
+
+      - name: Compile C FFI objects
+        run: make
 
       - name: Build and run pure tests
         run: |
@@ -113,7 +119,7 @@ jobs:
           # Filter out comments (-- sorry), documentation (0 sorry), and strings
           SORRY=$(grep -rn "\bsorry\b" --include="*.lean" LeanServer/ \
             | grep -v "^[^:]*:[^:]*:.*--" \
-            | grep -v "0 sorry\|zero sorry\|Zero sorry\|sem sorry\|no sorry\|No sorry" \
+            | grep -v "0.sorry\|zero.sorry\|Zero.sorry\|sem.sorry\|no.sorry\|No.sorry\|no admits" \
             | grep -v '".*sorry.*"' \
             | grep -v "/-" || true)
           if [ -n "$SORRY" ]; then

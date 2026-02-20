@@ -34,7 +34,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc libc6-dev
-
+      - name: Compile C FFI objects
+        run: make
       # ── Build ─────────────────────────────────────────────
       - name: Build project
         run: lake build leanserver
@@ -43,7 +44,7 @@ jobs:
       - name: Check zero sorry
         run: |
           # Search for sorry as a tactic/term, excluding comments and doc strings
-          count=$(grep -rn "\bsorry\b" LeanServer/ --include="*.lean" | grep -v "^[^:]*:[^:]*:.*--" | grep -v "/-" | grep -v "0 sorry" | grep -v "zero sorry" | grep -v "Zero sorry" | wc -l)
+          count=$(grep -rn "\bsorry\b" LeanServer/ --include="*.lean" | grep -v "^[^:]*:[^:]*:.*--" | grep -v "/-" | grep -v "0.sorry" | grep -v "zero.sorry" | grep -v "Zero.sorry" | grep -v "no admits" | wc -l)
           if [ "$count" -gt 0 ]; then
             echo "❌ Found $count sorry occurrences:"
             grep -rn "\bsorry\b" LeanServer/ --include="*.lean" | grep -v "^[^:]*:[^:]*:.*--" | grep -v "/-" | grep -v "0 sorry"

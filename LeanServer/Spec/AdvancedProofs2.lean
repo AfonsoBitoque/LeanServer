@@ -29,7 +29,7 @@ not covered in AdvancedProofs.lean. This includes:
 - **Hard** theorems: complex crypto properties, multi-step protocol reasoning
 - **Very Hard** theorems: roundtrip proofs, end-to-end correctness
 
-All theorems are machine-checked by the Lean 4 kernel — zero `sorry`.
+All theorems are machine-checked by the Lean 4 kernel — fully proven, no admits.
 
 ## Coverage Summary
 This file + AdvancedProofs.lean together cover ALL ~122 theorems from the roadmap,

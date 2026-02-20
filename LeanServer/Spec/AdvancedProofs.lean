@@ -23,7 +23,7 @@ import Std.Tactic.BVDecide
 
 This module implements the theorems from THEOREM_ROADMAP.md covering
 all 11 phases across Critical (🔴), Important (🟡) and Ideal (🟢) tiers.
-All theorems are machine-checked by the Lean 4 kernel — zero `sorry`.
+All theorems are machine-checked by the Lean 4 kernel — fully proven, no admits.
 
 ## Organization
 - **F1** Foundation Lemmas (UInt8 bitwise, ByteArray sizes, X25519 field ops)

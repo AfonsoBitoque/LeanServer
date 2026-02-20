@@ -56,6 +56,9 @@ jobs:
             lake-fuzz-${{ runner.os }}-
             lake-${{ runner.os }}-
 
+      - name: Compile C FFI objects
+        run: make
+
       - name: Build library
         run: lake build LeanServer
 
@@ -104,6 +107,9 @@ jobs:
           restore-keys: |
             lake-fuzz-${{ runner.os }}-
             lake-${{ runner.os }}-
+
+      - name: Compile C FFI objects
+        run: make
 
       - name: Build library
         run: lake build LeanServer
