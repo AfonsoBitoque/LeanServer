@@ -147,8 +147,8 @@ implementations.
 
 ## Appendix B: Build and Reproduction Instructions
 ```bash
-git clone https://github.com/<user>/LeanServer6
-cd LeanServer6
+git clone https://github.com/AfonsoBitoque/LeanServer
+cd LeanServer
 lake build                       # 150 jobs, 0 errors
 .lake/build/bin/test_integration  # run integration tests
 ```

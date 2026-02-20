@@ -176,7 +176,7 @@ Each lesson corresponds to a module in the codebase with exercises.
 curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
 
 # Clone the project
-git clone https://github.com/<user>/LeanServer6
+git clone https://github.com/AfonsoBitoque/LeanServer
 cd LeanServer6
 lake build leanserver
 

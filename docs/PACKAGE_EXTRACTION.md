@@ -11,7 +11,7 @@ Add to your `lakefile.toml`:
 ```toml
 [[require]]
 name = "LeanServer"
-git = "https://github.com/<user>/LeanServer6"
+git = "https://github.com/AfonsoBitoque/LeanServer"
 rev = "main"
 ```
 

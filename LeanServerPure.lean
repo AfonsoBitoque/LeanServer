@@ -31,7 +31,7 @@
 --   In your lakefile.toml:
 --     [[require]]
 --     name = "LeanServer"
---     git = "https://github.com/<user>/LeanServer6"
+--     git = "https://github.com/AfonsoBitoque/LeanServer"
 --     rev = "main"
 --
 --   In your .lean files:
