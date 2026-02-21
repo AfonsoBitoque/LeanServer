@@ -59,8 +59,10 @@ jobs:
       - name: Compile C FFI objects
         run: make
 
-      - name: Build library
-        run: lake build LeanServer
+      - name: Build library (including HTTPServer for fuzz targets)
+        run: |
+          lake build LeanServer
+          lake build LeanServer.Server.HTTPServer
 
       - name: Run ${{ matrix.harness }}
         run: |
@@ -111,8 +113,10 @@ jobs:
       - name: Compile C FFI objects
         run: make
 
-      - name: Build library
-        run: lake build LeanServer
+      - name: Build library (including HTTPServer for fuzz targets)
+        run: |
+          lake build LeanServer
+          lake build LeanServer.Server.HTTPServer
 
       - name: Run full fuzz suite
         run: bash fuzz/run_all.sh

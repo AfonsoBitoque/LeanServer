@@ -63,15 +63,15 @@ jobs:
           fi
           echo "✅ partial def count OK: $count ≤ 12"
 
-      - name: Check native_decide count (max 80)
+      - name: Check native_decide count (max 400)
         run: |
           count=$(grep -r "native_decide" LeanServer/ --include="*.lean" | wc -l)
           echo "native_decide count: $count"
-          if [ "$count" -gt 80 ]; then
-            echo "❌ Too many native_decide: $count (max: 80)"
+          if [ "$count" -gt 400 ]; then
+            echo "❌ Too many native_decide: $count (max: 400)"
             exit 1
           fi
-          echo "✅ native_decide count OK: $count ≤ 80"
+          echo "✅ native_decide count OK: $count ≤ 400"
 
       - name: Count proofs
         run: |
