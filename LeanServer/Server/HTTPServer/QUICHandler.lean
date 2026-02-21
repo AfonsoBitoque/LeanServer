@@ -1,6 +1,6 @@
 -- LeanServer/HTTPServer/QUICHandler.lean
 -- Re-export QUIC packet processing components from HTTPServer
--- (#17: sub-module structure for HTTPServer.lean)
+-- Sub-module structure: splits HTTPServer.lean into focused import targets
 --
 -- This module provides a clean import path for QUIC-related functionality:
 --   import LeanServer.Server.HTTPServer.QUICHandler

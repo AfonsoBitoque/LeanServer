@@ -1,6 +1,6 @@
-# LeanServer6 — Threat Model & Verification Assumptions
+# LeanServer — Threat Model & Verification Assumptions
 
-> This document defines what LeanServer6's formal proofs guarantee, what they assume,
+> This document defines what LeanServer's formal proofs guarantee, what they assume,
 > and what attacks are explicitly out of scope. Following best practices from
 > [seL4](https://sel4.systems/Verification/assumptions.html) and
 > [HACL*](https://hacl-star.github.io/).
@@ -9,7 +9,7 @@
 
 ## What the Proofs Guarantee
 
-LeanServer6's 174+ verified theorems (0 `sorry`, 0 `axiom`) provide the following guarantees:
+LeanServer's 914 verified theorems (0 `sorry`, 0 `axiom`) provide the following guarantees:
 
 ### Codec Correctness
 - **HPACK integer encoding/decoding** — roundtrip properties for header compression
@@ -179,7 +179,7 @@ These are partially mitigated by timeouts and limits but not formally proven to 
 
 ## Comparison with Reference Projects
 
-| Assumption | seL4 | miTLS | HACL* | LeanServer6 |
+| Assumption | seL4 | miTLS | HACL* | LeanServer |
 |-----------|------|-------|-------|-------------|
 | Compiler correctness | Verified (CompCert) | Verified (KaRaMeL→C) | Verified (Low*→C) | **Assumed** |
 | Hardware correctness | Assumed | Assumed | Assumed | Assumed |

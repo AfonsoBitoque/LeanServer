@@ -30,7 +30,7 @@ import LeanServer.Crypto.X25519
   - **seL4**: 4 layers (Abstract → Executable → C → Binary)
   - **CertiKOS**: ~37 abstraction layers with deep specifications
   - **miTLS**: Type-level state machine in F*
-  - **LeanServer6**: 3 layers (Spec → Model → Impl)
+  - **LeanServer**: 3 layers (Spec → Model → Impl)
 
   ### What This Spec Captures:
   1. Valid TLS 1.3 handshake state transitions (RFC 8446 Figure 1)

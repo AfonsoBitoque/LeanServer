@@ -336,7 +336,7 @@ theorem decrement_nonneg (n : Nat) : (if n > 0 then n - 1 else 0) ≥ 0 := by om
   ## Concurrency Model — Explicit Documentation
 
   ### Threading Architecture
-  LeanServer6 uses Lean 4's green thread model via `IO.asTask`:
+  LeanServer uses Lean 4's green thread model via `IO.asTask`:
   1. **Main thread**: epoll accept loop (single-threaded I/O multiplexing)
   2. **Per-connection tasks**: spawned via `IO.asTask` for each accepted connection
   3. **Background tasks**: config reload watcher, distributed rate limiter sync

@@ -133,8 +133,8 @@ elan install leanprover/lean4:v4.27.0
 ### 2. Compilar
 
 ```bash
-git clone https://github.com/lean-server/LeanServer6.git
-cd LeanServer6
+git clone https://github.com/AfonsoBitoque/LeanServer.git
+cd LeanServer
 lake build
 ```
 

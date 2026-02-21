@@ -1,6 +1,6 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════════
-# LeanServer6 — Conformance Test Suite (ROADMAP F1.5)
+# LeanServer — Conformance Test Suite (ROADMAP F1.5)
 #
 # Runs all protocol conformance checks:
 #   1. NIST/RFC crypto test vectors (internal — via Lean test binaries)
@@ -224,7 +224,7 @@ run_coverage_report() {
 # ═══════════════════════════════════════════════════════════════
 
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║     LeanServer6 — Conformance Test Suite (F1.5)        ║"
+echo "║     LeanServer — Conformance Test Suite (F1.5)        ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 
 case "$SUITE_FILTER" in

@@ -1,6 +1,6 @@
 -- LeanServer/HTTPServer/TLSHandler.lean
 -- Re-export TLS handshake and application loop components from HTTPServer
--- (#17: sub-module structure for HTTPServer.lean)
+-- Sub-module structure: splits HTTPServer.lean into focused import targets
 --
 -- This module provides a clean import path for TLS-related functionality:
 --   import LeanServer.Server.HTTPServer.TLSHandler

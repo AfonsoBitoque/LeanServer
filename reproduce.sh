@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================================
-# reproduce.sh — One-command artifact reproduction for LeanServer6
+# reproduce.sh — One-command artifact reproduction for LeanServer
 # ============================================================================
 # Usage: ./reproduce.sh
 #
@@ -11,7 +11,7 @@
 set -e
 
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║         LeanServer6 — Artifact Reproduction             ║"
+echo "║         LeanServer — Artifact Reproduction             ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
 

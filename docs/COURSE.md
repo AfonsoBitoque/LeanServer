@@ -177,7 +177,7 @@ curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf 
 
 # Clone the project
 git clone https://github.com/AfonsoBitoque/LeanServer
-cd LeanServer6
+cd LeanServer
 lake build leanserver
 
 # Run tests to verify setup

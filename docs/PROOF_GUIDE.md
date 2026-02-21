@@ -1,10 +1,10 @@
-# Proof Guide — LeanServer6
+# Proof Guide — LeanServer
 
-This document describes the proof methodology, naming conventions, and tactics used in LeanServer6.
+This document describes the proof methodology, naming conventions, and tactics used in LeanServer.
 
 ## Proof Architecture
 
-LeanServer6 uses a **3-layer refinement architecture** inspired by seL4 and CertiKOS:
+LeanServer uses a **3-layer refinement architecture** inspired by seL4 and CertiKOS:
 
 1. **Layer 1 — Abstract Specification** (`LeanServer/Spec/TLSSpec.lean`): Defines protocol behavior as inductive relations. No implementation.
 2. **Layer 2 — Executable Model** (`LeanServer/Spec/TLSModel.lean`): Deterministic functions that refine the abstract spec. Proven: `model_refines_spec`.

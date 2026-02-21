@@ -30,7 +30,7 @@ import LeanServer.Proofs
 
 ## Future: Standalone Package Extraction
 
-The following describes how to further extract three standalone packages from LeanServer6.
+The following describes how to further extract three standalone packages from LeanServer.
 
 
 ## 1. `lean-crypto` — Pure Lean Cryptographic Primitives

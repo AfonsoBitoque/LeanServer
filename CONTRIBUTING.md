@@ -1,6 +1,6 @@
-# Contributing to LeanServer6
+# Contributing to LeanServer
 
-Thank you for your interest in contributing to LeanServer6! This document provides
+Thank you for your interest in contributing to LeanServer! This document provides
 guidelines for contributing code, proofs, tests, and documentation.
 
 ## Table of Contents
@@ -25,8 +25,8 @@ guidelines for contributing code, proofs, tests, and documentation.
 ### Build
 
 ```bash
-git clone https://github.com/lean-server/LeanServer6.git
-cd LeanServer6
+git clone https://github.com/AfonsoBitoque/LeanServer.git
+cd LeanServer
 lake build
 ```
 
@@ -199,7 +199,7 @@ Motivation — which roadmap item (F0.1, F2.3, etc.) does this address?
 ## Project Structure
 
 ```
-LeanServer6/
+LeanServer/
 ├── LeanServer/           # Main library
 │   ├── Protocol/         # Protocol implementations (HPACK, GRPC, WebSocket)
 │   ├── Server/           # Server components (HTTPServer, middleware, framework)
@@ -229,4 +229,4 @@ LeanServer6/
 Open a GitHub issue with the `question` label, or check existing documentation
 in the `docs/` directory.
 
-Thank you for helping make LeanServer6 better! 🚀
+Thank you for helping make LeanServer better! 🚀

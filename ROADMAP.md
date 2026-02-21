@@ -1,4 +1,4 @@
-# Roadmap Unificado — LeanServer6
+# Roadmap Unificado — LeanServer
 
 > **Data**: 2025-02-15  
 > **Fontes**: analise19.md (auditoria interna) + analiseestrategica.md (análise externa)  

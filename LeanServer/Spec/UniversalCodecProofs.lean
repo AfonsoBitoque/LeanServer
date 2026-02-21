@@ -288,7 +288,7 @@ theorem decodeVarInt_beyond_size (data : ByteArray) (start : Nat) (h : start ≥
 /-!
   ## Proof Inventory (F2.2 + Phase 5)
 
-  ### Universal proofs (this file): 36 theorems
+  ### Universal proofs (this file): 37 theorems
   1. `frametype_roundtrip_universal`: ∀ ft, fromByte (toByte ft) = some ft
   2. `frametype_toByte_injective`: toByte is injective
   3. `serializeFrameHeader_size_universal`: ∀ h, serialize produces 9 bytes

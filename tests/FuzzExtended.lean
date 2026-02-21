@@ -271,7 +271,7 @@ def testSHA256CollisionResistance (iterations : Nat) : IO Bool := do
 
 def main : IO UInt32 := do
   IO.println "╔══════════════════════════════════════════════════════════╗"
-  IO.println "║     LeanServer6 — Extended Fuzz Tests (F1.6)           ║"
+  IO.println "║     LeanServer — Extended Fuzz Tests (F1.6)           ║"
   IO.println "╚══════════════════════════════════════════════════════════╝"
   IO.println ""
 

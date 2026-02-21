@@ -2,12 +2,12 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in LeanServer6, please report it responsibly.
+If you discover a security vulnerability in LeanServer, please report it responsibly.
 
 ### How to Report
 
 1. **Email:** Send a detailed report to the project maintainer (see repository contacts)
-2. **GitHub:** Use [GitHub Security Advisories](https://github.com/lean-server/LeanServer6/security/advisories/new) to report privately
+2. **GitHub:** Use [GitHub Security Advisories](https://github.com/AfonsoBitoque/LeanServer/security/advisories/new) to report privately
 3. **Do NOT** open a public issue for security vulnerabilities
 
 ### What to Include

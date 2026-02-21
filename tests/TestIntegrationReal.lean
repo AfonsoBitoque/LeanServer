@@ -378,7 +378,7 @@ def testStreamStateMachine : IO Bool := do
 
 def main : IO UInt32 := do
   IO.println "╔══════════════════════════════════════════════════════════╗"
-  IO.println "║     LeanServer6 — Real Integration Tests (F1.4)        ║"
+  IO.println "║     LeanServer — Real Integration Tests (F1.4)        ║"
   IO.println "╚══════════════════════════════════════════════════════════╝"
   IO.println ""
 

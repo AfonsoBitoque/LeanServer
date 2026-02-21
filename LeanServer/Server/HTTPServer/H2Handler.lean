@@ -1,6 +1,6 @@
 -- LeanServer/HTTPServer/H2Handler.lean
 -- Re-export HTTP/2 connection handling components from HTTPServer
--- (#17: sub-module structure for HTTPServer.lean)
+-- Sub-module structure: splits HTTPServer.lean into focused import targets
 --
 -- This module provides a clean import path for HTTP/2 functionality:
 --   import LeanServer.Server.HTTPServer.H2Handler

@@ -510,7 +510,7 @@ def edgeCaseTests : Array TestCase := #[
 
 def main : IO UInt32 := do
   IO.println "╔══════════════════════════════════════════════════════════╗"
-  IO.println "║  HTTP/2 Conformance Tests — LeanServer6 Phase 8.3      ║"
+  IO.println "║  HTTP/2 Conformance Tests — LeanServer Phase 8.3      ║"
   IO.println "╚══════════════════════════════════════════════════════════╝\n"
 
   let (p1, f1) ← runTestSuite "Frame Header Tests" frameHeaderTests

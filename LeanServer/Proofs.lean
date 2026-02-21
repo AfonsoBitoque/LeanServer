@@ -18,17 +18,17 @@ PROVAS FORMAIS DO LEANSERVER
 Este módulo contém provas formais verificadas pelo Lean 4.
 Estão organizadas em 3 categorias por nível de significância:
 
-**A. Sanity Checks** (34 provas)
+**A. Sanity Checks** (45 provas)
    Verificações triviais de constantes e valores por omissão.
    Usam `rfl`, `native_decide`, ou `omega` sobre literais.
    Utilidade: documentação executável, regressão contra alterações acidentais.
 
-**B. Structural Properties** (26 provas)
+**B. Structural Properties** (96 provas)
    Propriedades sobre tipos e fórmulas aritméticas.
    Usam `cases`, `simp`, `omega` sobre a estrutura de tipos.
    Utilidade: garantem invariantes tipológicos dos protocolos.
 
-**C. Protocol Correctness** (25 provas)
+**C. Protocol Correctness** (23 provas)
    Propriedades sobre o comportamento real de funções.
    Provam correcção de codecs, segurança de parsers, invariantes de memória.
    Utilidade: garantias funcionais — o código faz o que é suposto.
@@ -49,7 +49,7 @@ estão correctos. Cada uma é resolvida por `rfl`, `native_decide` ou `omega`
 sobre literais. O valor destas provas é documentação executável e detecção
 de regressões — não provam propriedades profundas.
 
-Contagem: 34 provas
+Contagem: 45 provas
 ===============================================================================
 -/
 
@@ -507,7 +507,7 @@ Estas provas verificam propriedades funcionais: que codecs são bijectivos,
 que parsers rejeitam input inválido, que operações preservam invariantes.
 São as provas mais valiosas do ficheiro.
 
-Contagem: 25 provas
+Contagem: 23 provas
 ===============================================================================
 -/
 
@@ -750,7 +750,7 @@ Provas sobre a estrutura de tipos (exaustividade de enums, propriedades
 aritméticas de fórmulas de stream IDs, etc.). Usam `cases`, `simp`, `omega`
 sobre variáveis e tipos — não sobre literais fixos.
 
-Contagem: 26 provas
+Contagem: 96 provas
 ===============================================================================
 -/
 

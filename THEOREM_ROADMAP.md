@@ -1,4 +1,4 @@
-# LeanServer6 — Theorem Roadmap: Pre-Release
+# LeanServer — Theorem Roadmap: Pre-Release
 
 > **Estado actual:** 914 teoremas, 0 sorry, 0 vacuamente verdadeiros.
 > **Diagnóstico:** W1, W2, W4 corrigidos. W3 é honesto (nome diz "at_zero").

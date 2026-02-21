@@ -456,7 +456,7 @@ theorem zeroize_produces_zeros_size (n : Nat) :
   - HPACK structural: `hpack_field_size_minimum`, `hpack_default_fits_one_entry`
   - Anti-downgrade: `tls12_sentinel_size`, `tls11_sentinel_size`, sentinel detection functions
 
-  Total: 39 theorems, zero admissions, 0 axioms.
+  Total: 46 theorems, zero admissions, 0 axioms.
 -/
 
 end LeanServer.ProtocolInvariants

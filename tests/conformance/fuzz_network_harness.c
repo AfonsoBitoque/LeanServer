@@ -1,5 +1,5 @@
 /*
- * AFL++ / libFuzzer harness for LeanServer6 C FFI code
+ * AFL++ / libFuzzer harness for LeanServer C FFI code
  * ROADMAP F1.6 — Coverage-guided fuzzing for Network.c
  *
  * Build with AFL++:

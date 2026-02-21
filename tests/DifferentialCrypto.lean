@@ -311,7 +311,7 @@ def hkdfTests : IO TestResult := do
 
 def main : IO UInt32 := do
   IO.println "╔══════════════════════════════════════════════════════════╗"
-  IO.println "║  Differential Crypto Testing — LeanServer6 Phase 8.1   ║"
+  IO.println "║  Differential Crypto Testing — LeanServer Phase 8.1   ║"
   IO.println "╚══════════════════════════════════════════════════════════╝\n"
 
   let sha := ← sha256Tests

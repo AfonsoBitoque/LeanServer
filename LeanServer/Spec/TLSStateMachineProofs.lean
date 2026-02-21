@@ -434,7 +434,7 @@ theorem close_always_closed :
     this function involves IO monadic effects. The pure equivalent is proved via
     `encryptAppData` which is the core data-sending function.
 
-  Total: ~30 theorems, zero admissions, 0 axioms.
+  Total: 34 theorems, zero admissions, 0 axioms.
 -/
 
 end TLS.StateMachineProofs
