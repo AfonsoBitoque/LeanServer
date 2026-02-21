@@ -134,13 +134,19 @@ theorem double_generateNonce_counters_differ (state : NonceState) :
   have h2 := generateNonce_counter_increases (generateNonce state).1
   refine ⟨?_, ?_, ?_⟩ <;> omega
 
-/-- **NONCE UNIQUENESS** (core property): Two consecutive nonces are never equal,
-    assuming the padSeqNum function is injective on consecutive values.
-    This is the key safety property — nonce reuse in AES-GCM is catastrophic. -/
-theorem nonce_uniqueness (state : NonceState) :
-    (generateNonce state).2 ≠ (generateNonce (generateNonce state).1).2 ∨
-    state.counter = state.counter := by
-  right; rfl
+/-- **NONCE STRUCTURAL UNIQUENESS** (core property): Two consecutive nonces
+    use different sequence numbers (counters), which is the structural
+    precondition for byte-level nonce uniqueness.
+    The byte-level inequality is verified computationally by
+    `concrete_nonce_uniqueness` below and in `Spec.AdvancedProofs.F5`.
+    Nonce reuse in AES-GCM is catastrophic (Joux 2006). -/
+theorem nonce_structural_uniqueness (state : NonceState) :
+    let s1 := (generateNonce state).1
+    let s2 := (generateNonce s1).1
+    state.counter ≠ s1.counter ∧ s1.counter ≠ s2.counter := by
+  have h1 := generateNonce_counter_increases state
+  have h2 := generateNonce_counter_increases (generateNonce state).1
+  exact ⟨by omega, by omega⟩
 
 /-- **SEQUENCE SEPARATION**: The sequence numbers used by consecutive generateNonce
     calls are always exactly 1 apart. -/

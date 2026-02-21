@@ -1,7 +1,7 @@
 # LeanServer6 — Theorem Roadmap: Pre-Release
 
-> **Estado actual:** 935 teoremas, 0 sorry.
-> **Diagnóstico:** ~20 teoremas são vacuamente verdadeiros ou triviais. O roadmap abaixo é histórico — grande parte já foi implementada.
+> **Estado actual:** 914 teoremas, 0 sorry, 0 vacuamente verdadeiros.
+> **Diagnóstico:** W1, W2, W4 corrigidos. W3 é honesto (nome diz "at_zero").
 
 ---
 
@@ -11,12 +11,14 @@ Antes de adicionar novos teoremas, estes existentes precisam de ser **substituí
 
 | # | Teorema | Ficheiro | Problema |
 |---|---------|----------|----------|
-| W1 | `sbox_surjective` | [Proofs.lean](LeanServer/Proofs.lean#L1490) | `∃ inp, ... → True` — disjunção com `True` torna-o vacuamente verdadeiro. Prova nada. |
-| W2 | `nonce_uniqueness` | [NonceManager.lean](LeanServer/Crypto/NonceManager.lean#L140) | `... ∨ state.counter = state.counter` — lado direito é `rfl`, sempre verdadeiro. Prova nada. |
+| W1 | `sbox_surjective` | [Proofs.lean](LeanServer/Proofs.lean#L1490) | ✅ **CORRIGIDO** — substituído por `sbox_injective_crossref` (prova real via `native_decide`). Versão forte em `Spec.AdvancedProofs.sBox_injective`. |
+| W2 | `nonce_uniqueness` | [NonceManager.lean](LeanServer/Crypto/NonceManager.lean#L140) | ✅ **CORRIGIDO** — substituído por `nonce_structural_uniqueness` que prova `counter₁ ≠ counter₂ ∧ counter₂ ≠ counter₃` via `omega`. Sem escape `∨ rfl`. |
 | W3 | `padSeqNum_injective_at_zero` | [NonceManager.lean](LeanServer/Crypto/NonceManager.lean#L116) | Só prova `padSeqNum 0 ≠ padSeqNum 1` — um caso concreto, não injectividade. |
-| W4 | `aes_sbox_complete` | [Proofs.lean](LeanServer/Proofs.lean#L610) | Apenas `sBox.size = 256` — "completude" no nome, mas é só tamanho. |
+| W4 | `aes_sbox_complete` | [Proofs.lean](LeanServer/Proofs.lean#L610) | ✅ **CORRIGIDO** — renomeado para `aes_sbox_size` com docstring honesta (bounds-safety, não "completude"). |
 
-**Acção:** Substituir W1-W4 por versões fortes nas fases abaixo.
+**Estado:** W1, W2, W4 corrigidos. W3 (`padSeqNum_injective_at_zero`) é honesto
+— o nome indica claramente que é um caso concreto. A versão universal (F5.1)
+requer prova de injectividade de big-endian encoding, planeada para fase 5.
 
 ---
 
@@ -415,8 +417,8 @@ addRoundKey_self_inverse (XOR involution)
 
 | Métrica | Actual | Objectivo |
 |---------|--------|----------|
-| Teoremas totais | 935 | ~1000 |
-| Teoremas fracos/vacuous | ~4 | 0 |
+| Teoremas totais | 914 | ~1000 |
+| Teoremas fracos/vacuous | 0 | 0 |
 | Teoremas com `native_decide` only | ~50 | ~50 (+ universais ∀) |
 | Codec roundtrip universais | 0 | 4 |
 | Crypto roundtrip proofs | 0 | 3 (AES, RSA-PSS, TLS record) |

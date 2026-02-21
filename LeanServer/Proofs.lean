@@ -33,7 +33,7 @@ Estão organizadas em 3 categorias por nível de significância:
    Provam correcção de codecs, segurança de parsers, invariantes de memória.
    Utilidade: garantias funcionais — o código faz o que é suposto.
 
-Total: 85 provas, 0 axiomas, 0 sorry.
+Total: 164 provas, 0 axiomas, 0 sorry, 0 vacuamente verdadeiros.
 ===============================================================================
 -/
 
@@ -603,11 +603,12 @@ theorem buildChangeCipherSpec_size :
 -- ── C: AES security boundaries ──
 
 /--
-Teorema: S-Box AES tem exatamente 256 entradas.
-Garante que todo valor de byte (0-255) tem uma substituição definida,
-prevenindo out-of-bounds em subByte.
+Teorema: S-Box AES tem exatamente 256 entradas (bounds-safety).
+Garante que `subByte` nunca faz out-of-bounds access.
+Nota: a propriedade de bijectividade é provada por `sBox_injective` em
+`Spec.AdvancedProofs2` via `native_decide` exaustivo.
 -/
-theorem aes_sbox_complete :
+theorem aes_sbox_size :
   LeanServer.AES.sBox.size = 256 := by
   native_decide
 
@@ -1481,18 +1482,18 @@ finite domain (using native_decide for exhaustive verification).
 
 -- ── 4.1: AES S-Box Properties ──
 
-/-- **AES S-BOX SURJECTIVITY**: Every output byte (0-255) is produced by some input.
-    This means the S-Box covers the entire byte range — no byte value is "missing"
-    from the output, which is necessary for invertibility.
-    Proved exhaustively via decide over all 256 output values.
+/-- **AES S-BOX INJECTIVITY (cross-reference)**:
+    The S-Box is injective (distinct inputs → distinct outputs), proved by
+    exhaustive `native_decide` in `Spec.AdvancedProofs.sBox_injective`.
+    Injectivity on a finite domain of 256 elements implies bijection (permutation),
+    so the S-Box is also surjective by the pigeonhole principle.
 
     Reference: FIPS 197 §5.1.1 — SubBytes operates on a bijective substitution table. -/
-theorem sbox_surjective :
-    ∀ (out : Fin 256), ∃ (inp : Fin 256),
-    LeanServer.AES.sBox.get inp.val (by have := LeanServer.AES.sBox_size; omega) =
-    LeanServer.AES.sBox.get out.val (by have := LeanServer.AES.sBox_size; omega) → True := by
-  intro out
-  exact ⟨out, fun _ => trivial⟩
+theorem sbox_injective_crossref :
+    ∀ (a b : Fin 256),
+    LeanServer.AES.sBox.get a.val (by have := LeanServer.AES.sBox_size; omega) =
+    LeanServer.AES.sBox.get b.val (by have := LeanServer.AES.sBox_size; omega) → a = b := by
+  native_decide
 
 /-- **AES S-BOX NO FIXED POINT AT ZERO**: The S-Box maps 0x00 to 0x63, not to itself.
     This is a non-linearity property — the S-Box has no trivial fixed points at 0.
