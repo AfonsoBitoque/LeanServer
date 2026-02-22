@@ -341,24 +341,6 @@ R: O LeanServer é modular:
 - Implemente traits para extensibilidade
 - Use FFI para integração com C/C++
 
-### Suporte
-
-**P: Onde encontrar ajuda?**
-R: Múltiplas opções:
-- Documentação: `docs/` folder
-- Exemplos: `examples/` folder
-- Issues: GitHub Issues
-- Discussões: GitHub Discussions
-- Email: maintainer@leanserver.dev
-
-**P: Existe suporte comercial?**
-R: Sim! Oferecemos:
-- Consultoria de implementação
-- Suporte 24/7
-- Treinamento em Lean
-- Audits de segurança
-- SLA garantido
-
 **P: Como obter updates?**
 R: Acompanhe o repositório:
 ```bash
@@ -461,5 +443,6 @@ Se o problema persistir:
 2. Forneça logs detalhados
 3. Descreva passos exatos para reproduzir
 4. Abra issue no GitHub com todas as informações
+
 
 Para questões críticas, entre em contato direto com a equipe de suporte.
