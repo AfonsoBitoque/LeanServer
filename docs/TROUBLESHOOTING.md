@@ -436,13 +436,4 @@ histogram_quantile(0.95, rate(leanserver_request_duration_bucket[5m])) > 0.1
 - **Prometheus**: Use as regras em `docs/monitoring/prometheus-rules.yml`
 - **Custom**: Crie painéis baseados nas métricas em `/metrics`
 
-## 🚀 Próximos Passos
 
-Se o problema persistir:
-1. Colete informações completas do ambiente
-2. Forneça logs detalhados
-3. Descreva passos exatos para reproduzir
-4. Abra issue no GitHub com todas as informações
-
-
-Para questões críticas, entre em contato direto com a equipe de suporte.
