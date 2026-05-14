@@ -657,7 +657,7 @@ theorem x25519_add_assoc_concrete : add (add 100 200) 300 = add 100 (add 200 300
 
 /-- 🟡 Field identity: a - a = 0 (mod P) -/
 theorem x25519_sub_self (a : Nat) (_h : a < P) : sub a a = 0 := by
-  unfold sub; simp [Nat.le_refl, Nat.sub_self, Nat.zero_mod]
+  unfold sub; simp [Nat.sub_self, Nat.zero_mod]
 
 /-- 🟡 Field identity: a + (P - a) = 0 (mod P) for a < P (concrete witnesses) -/
 theorem x25519_add_neg_1 : add 1 (sub 0 1) = 0 := by native_decide

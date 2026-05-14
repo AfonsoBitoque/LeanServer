@@ -262,18 +262,6 @@ def closeConnectionPoolLegacy (pool : ConnectionPool) : IO Unit := do
 -- TYPE-SAFE ORM FOUNDATION
 -- ==========================================
 
--- Generic table schema
-structure TableSchema where
-  name : String
-  columns : Array ColumnSchema
-
-structure ColumnSchema where
-  name : String
-  type : ColumnType
-  nullable : Bool := false
-  primaryKey : Bool := false
-  autoIncrement : Bool := false
-
 inductive ColumnType : Type where
   | Integer : ColumnType
   | BigInt : ColumnType
@@ -283,6 +271,18 @@ inductive ColumnType : Type where
   | DateTime : ColumnType
   | Decimal : Nat → Nat → ColumnType  -- precision, scale
   | Blob : ColumnType
+
+structure ColumnSchema where
+  name : String
+  type : ColumnType
+  nullable : Bool := false
+  primaryKey : Bool := false
+  autoIncrement : Bool := false
+
+-- Generic table schema
+structure TableSchema where
+  name : String
+  columns : Array ColumnSchema
 
 instance : Inhabited ColumnType where
   default := ColumnType.Text
